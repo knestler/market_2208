@@ -15,36 +15,32 @@ RSpec.describe Market do
   end
 
   it 'exists' do 
-    expect(@vendor).to be_an_instance_of(Vendor)
+    expect(@market).to be_an_instance_of(Market)
   end
 
   it 'has attributes' do     
-    @market.name
-    #=> "South Pearl Street Farmers Market"
-    @market.vendors
-    #=> []
-    
+    expect(@market.name).to eq("South Pearl Street Farmers Market")
+    expect(@market.vendors).to eq([])
+  end
+
+  it 'can stock items and calculate revenue' do 
     @vendor1.stock(@item1, 35)
     @vendor1.stock(@item2, 7)
-
     @vendor2.stock(@item4, 50)
     @vendor2.stock(@item3, 25)
-
     @vendor3.stock(@item1, 65)
+    
     @market.add_vendor(@vendor1)
+    expect(@market.vendors).to eq([@vendor1])
     @market.add_vendor(@vendor2)
     @market.add_vendor(@vendor3)
-    @market.vendors
-    #=> [#<Vendor:0x00007fe1348a1160...>, #<Vendor:0x00007fe1349bed40...>, #<Vendor:0x00007fe134910650...>]
-    @market.vendor_names
-    #=> ["Rocky Mountain Fresh", "Ba-Nom-a-Nom", "Palisade Peach Shack"]
-    @market.vendors_that_sell(@item1)
-    #=> [#<Vendor:0x00007fe1348a1160...>, #<Vendor:0x00007fe134910650...>]
-    @market.vendors_that_sell(@item4)
-    #=> [#<Vendor:0x00007fe1349bed40...>]
-    @vendor1.potential_revenue
-    #=> 29.75
-    @vendor2.potential_revenue
-    #=> 345.00
-    @vendor3.potential_revenue
-    #=> 48.7
+    
+    expect(@market.vendors).to eq([@vendor1, @vendor2, @vendor3])
+    expect(@market.vendor_names).to eq(["Rocky Mountain Fresh", "Ba-Nom-a-Nom", "Palisade Peach Shack"])
+    expect(@market.vendors_that_sell(@item1)).to eq([@vendor1, @vendor3])
+    expect(@market.vendors_that_sell(@item4)).to eq([@vendor2])
+    expect(@vendor1.potential_revenue).to eq(29.75)
+    expect(@vendor2.potential_revenue).to eq(345.00)
+    expect(@vendor3.potential_revenue).to eq(48.75)
+  end
+end
