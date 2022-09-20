@@ -43,4 +43,39 @@ RSpec.describe Market do
     expect(@vendor2.potential_revenue).to eq(345.00)
     expect(@vendor3.potential_revenue).to eq(48.75)
   end
+
+  it 'can inventory items' do 
+    @vendor1.stock(@item1, 35)
+    @vendor1.stock(@item2, 7)
+    @vendor2.stock(@item4, 50)
+    @vendor2.stock(@item3, 25)
+    @vendor3.stock(@item1, 65)
+    @vendor3.stock(@item3, 10)
+    @market.add_vendor(@vendor1)
+    @market.add_vendor(@vendor2)
+    @market.add_vendor(@vendor3)
+
+    # expect(@market.total_inventory).to eq(
+    #     ({
+    #       @item1=> {
+    #         quantity: 100,
+    #         vendors: [@vendor1, @vendor3]
+    #       },
+    #       @item2 => {
+    #         quantity: 7,
+    #         vendors: [@vendor1]
+    #       },
+    #       @item4 => {
+    #         quantity: 50,
+    #         vendors: [@vendor2]
+    #       },
+    #       @item3 => {
+    #         quantity: 35,
+    #         vendors: [@vendor2, @vendor3]
+    #       },
+    #     })
+
+      expect(@market.overstocked_items).to eq([@item1])
+      expect(@market.sorted_item_list).to eq(["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", "Tomato"])
+  end
 end
